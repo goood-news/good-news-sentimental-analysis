@@ -22,9 +22,14 @@ def preprocessing_dataset(dataset):
   label = []
   sentence = []
   for i in range(len(dataset)):
-    if isinstance(dataset.iloc[i]['document'], str):
-      label.append(dataset.iloc[i]['label'])
-      sentence.append(dataset.iloc[i]['document'])
+    if isinstance(dataset.iloc[i]['FULL_CONTENTS'], str):
+      label.append(dataset.iloc[i]['LABEL'])
+      st = ''
+      for i, s in enumerate(dataset.iloc[i]['FULL_CONTENTS'].split('  ')):
+        st += s
+        if i == 4:
+          break
+      sentence.append(st)
 
   out_dataset = pd.DataFrame({'sentence':sentence, 'label':label})
   return out_dataset
@@ -33,7 +38,9 @@ def preprocessing_dataset(dataset):
 # 파일을 불러옵니다.
 def load_data(dataset_dir):
   # load dataset
-  dataset = pd.read_csv(dataset_dir, delimiter='\t')
+  dataset = pd.read_csv(dataset_dir, header=None)
+  dataset.columns = ['CATEGORY', 'PAGE', 'TITLE', 'SOURCE', 'DATE', 'CONTENTS', 'LINK', 'IMAGE', 'FULL_CONTENTS', 'LIKES', 'DISLIKES', 'LABEL']
+  dataset = dataset.loc[dataset['LIKES'] + dataset['DISLIKES'] != 0]
   dataset = preprocessing_dataset(dataset)
   return dataset
 
@@ -46,7 +53,7 @@ def tokenized_dataset(dataset, tokenizer):
       return_tensors="pt",
       padding=True,
       truncation=True,
-      max_length=50,
+      max_length=100,
       add_special_tokens=True,
       return_token_type_ids = True
       )

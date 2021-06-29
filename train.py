@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import pickle as pickle
 import json
 import os
@@ -8,6 +10,7 @@ import torch
 from sklearn.metrics import accuracy_score
 from transformers import AutoTokenizer
 #  BertForSequenceClassification, Trainer, TrainingArguments, BertConfig, BartModel
+from transformers import MBartModel, MBartConfig
 import transformers
 from load_data import *
 from torch.utils.tensorboard import SummaryWriter
@@ -31,6 +34,8 @@ import time
 from time import sleep
 # from kobart import get_pytorch_kobart_model, get_kobart_tokenizer
 from transformers import PreTrainedTokenizerFast
+
+import wandb
 
 # seed 고정 
 def seed_everything(seed):
@@ -78,23 +83,27 @@ def train(model_dir, args):
   # load model and tokenizer
   MODEL_NAME = args.pretrained_model
   tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-
+  # change model
   if MODEL_NAME == "hyunwoongko/kobart":
     tokenizer = PreTrainedTokenizerFast.from_pretrained("hyunwoongko/kobart")
+  if MODEL_NAME == "bert-base-uncased":
+    tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 
   # load dataset
-  datasets_ = load_data("/content/drive/MyDrive/sentimental_analisis/ratings_train.txt")
+  # datasets_ = load_data("/content/drive/MyDrive/sentimental_analisis/ratings_train.txt")
+  # labels_ = datasets_['label'].values
+  datasets_ = load_data("/content/drive/MyDrive/sentimental_analisis/file.csv")
   labels_ = datasets_['label'].values
   
-
+# [1 1 0 0 1 0 0 1 1 1] -> 1: 6. 0:4 1.2 0.8
   # train eval split 20% k-fold (5)   # 참고로 저장도 folder 내에 1,2,3,4,5로 되게 하자
-  length = len(labels_)
-  kf = args.kfold
+  length = len(labels_) # 10
+  kf = args.kfold # 1
   class_indexs = defaultdict(list)
   for i, label_ in enumerate(labels_):
-    class_indexs[label_].append(i)
+    class_indexs[label_].append(i) #  class index [0] = [2,3,5,6], class index[1]=[나머지]
   val_indices = set()
-  for index in class_indexs:
+  for index in class_indexs: # stratified: key : 0, 1 classindex[0][0/5:1/5]
     val_indices = (val_indices | set(class_indexs[index][int(len(class_indexs[index])*(kf-1)/5) : int(len(class_indexs[index])*kf/5)]))
   train_indices = set(range(length)) - val_indices
 
@@ -130,9 +139,17 @@ def train(model_dir, args):
   )
 
   # setting model hyperparameter
-  config_module = getattr(import_module("transformers"), args.model_type + "Config")
+  if args.model_type=='mb':
+    config_module = getattr(import_module("transformers"), "MBartConfig")
+  elif args.model_type=='BertBase':
+    config_module = getattr(import_module("transformers"), "BertConfig")
+  else :
+    config_module = getattr(import_module("transformers"), args.model_type + "Config")
+  
   model_config = config_module.from_pretrained(MODEL_NAME)
   model_config.num_labels = 2
+    
+
 
 #   model_config.hidden_dropout_prob = 0
   # model_config.attention_probs_dropout_prob = 0.5
@@ -144,15 +161,19 @@ def train(model_dir, args):
   elif args.model_type == "Electra":
     model_module = getattr(import_module("model"), "RElectra")
     model = model_module.from_pretrained(MODEL_NAME, config=model_config, args=args)  # args 기존으로 돌리려면 빼줘야 함
-
-
   elif args.model_type == "XLMRoberta":
     model_module = getattr(import_module("model"), "xlmRoBerta")
     model = model_module(config=model_config, args=args)  # args 기존으로 돌리려면 빼줘야 함
-  
   elif args.model_type == "Bart":
     model_module = getattr(import_module("model"), "Bart")
     model = model_module(config=model_config, args=args)  # args 기존으로 돌리려면 빼줘야 함
+  elif args.model_type == "mb":
+    model_module = getattr(import_module("model"), "mbart")
+    model = model_module(config=model_config, args=args)  # args 기존으로 돌리려면 빼줘야 함
+    # model = AutoModelForSeq2SeqLM.from_pretrained("facebook/mbart-large-cc25")
+  elif args.model_type == "BertBase":
+    model_module = getattr(import_module("model"), "BertBaseUncased")
+    model = model_module(config=model_config, args=args)
 
   model.parameters
   model.to(device)
@@ -195,6 +216,7 @@ def train(model_dir, args):
       input_ids = items['input_ids'].to(device)
       token_type_ids = items['token_type_ids'].to(device)
       attention_mask = items['attention_mask'].to(device)
+      # print(f"attention_mask: ", attention_mask)
 
       optimizer.zero_grad()
       outs = model(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask, labels=labels)
@@ -278,6 +300,9 @@ def train(model_dir, args):
       logger.add_scalar("Val/loss", val_loss, epoch)
       logger.add_scalar("Val/accuracy", val_acc, epoch)
       logger.add_scalar("Val/F1(avg)", val_f1, epoch)
+
+      wandb.log({"train_loss": train_loss, "train_acc":train_acc,
+          "lr":current_lr, "valid_loss":val_loss, "valid_acc":val_acc})
       s = f'Time elapsed: {(time.time() - start_time)/60: .2f} min'
       print(s)
       print()
@@ -286,8 +311,8 @@ def train(model_dir, args):
 if __name__ == '__main__':
   os.environ["TOKENIZERS_PARALLELISM"] = "false"
   parser = argparse.ArgumentParser()
-  parser.add_argument('--model_type', type=str, default='Bert')
-  parser.add_argument('--pretrained_model', type=str, default='bert-base-multilingual-cased')
+  parser.add_argument('--model_type', type=str, default='BertBase')
+  parser.add_argument('--pretrained_model', type=str, default='bert-base-uncased')
   
   parser.add_argument('--epochs', type=int, default=4)
   parser.add_argument('--batch_size', type=int, default=8)
@@ -298,7 +323,7 @@ if __name__ == '__main__':
   parser.add_argument('--criterion', type=str, default='cross_entropy', help='criterion type (default: cross_entropy)')  # 정의가 안됨 모델안에 들어가 있음
   parser.add_argument('--optimizer', type=str, default='AdamW', help='optimizer type (default: AdamW)')
   
-  parser.add_argument('--lr', type=float, default=8e-6)
+  parser.add_argument('--lr', type=float, default=1e-6)
   parser.add_argument('--weight_decay', type=float, default=0.01)
   parser.add_argument('--warmup_steps', type=int, default=500)               # number of warmup steps for learning rate scheduler
   parser.add_argument('--seed' , type=int , default = 42, help='random seed (default: 42)')
@@ -310,12 +335,16 @@ if __name__ == '__main__':
 
 
   args = parser.parse_args()
+
+
+
   args.epochs = 10
   args.optimizer = 'AdamW'
-  args.name = 'xlm_batch8_kfold_'
-  args.pretrained_model = "xlm-roberta-large"
-  args.model_type = "XLMRoberta"
+  args.name = 'new_mbart-large-cc25_kfold_'
+  args.pretrained_model = "bert-base-uncased"
+  args.model_type = "BertBase"
   args.dropout_rate = 0
+  
   # args.pretrained_model = "kykim/bert-kor-base"
   # args.model_type = "Bart"
   # args.pretrained_model = "hyunwoongko/kobart"
@@ -335,4 +364,8 @@ if __name__ == '__main__':
   print(f"k-fold num : {i}")
   print('='*40)
   args.kfold = i
+
+  wandb.login()
+  wandb.init(project='good_news', name=args.name, config=vars(args))
+
   train(model_dir, args)

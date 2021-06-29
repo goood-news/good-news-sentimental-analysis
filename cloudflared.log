@@ -1,0 +1,51 @@
+{"level":"info","time":"2021-06-25T06:45:23Z","message":"Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]"}
+{"level":"info","time":"2021-06-25T06:45:23Z","message":"Version 2021.6.0"}
+{"level":"info","time":"2021-06-25T06:45:23Z","message":"GOOS: linux, GOVersion: devel +11087322f8 Fri Nov 13 03:04:52 2020 +0100, GoArch: amd64"}
+{"level":"info","time":"2021-06-25T06:45:23Z","message":"Settings: map[logfile:./cloudflared.log metrics:localhost:45678 url:ssh://localhost:22]"}
+{"level":"info","autoupdateFreq":86400000,"time":"2021-06-25T06:45:23Z","message":"Autoupdate frequency is set"}
+{"level":"info","time":"2021-06-25T06:45:23Z","message":"Initial protocol h2mux"}
+{"level":"info","time":"2021-06-25T06:45:23Z","message":"Starting metrics server on 127.0.0.1:45678/metrics"}
+{"level":"info","connIndex":0,"location":"AMS","time":"2021-06-25T06:45:23Z","message":"Connection established"}
+{"level":"info","time":"2021-06-25T06:45:25Z","message":"Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]"}
+{"level":"info","time":"2021-06-25T06:45:25Z","message":"Version 2021.6.0"}
+{"level":"info","time":"2021-06-25T06:45:25Z","message":"GOOS: linux, GOVersion: devel +11087322f8 Fri Nov 13 03:04:52 2020 +0100, GoArch: amd64"}
+{"level":"info","time":"2021-06-25T06:45:25Z","message":"Settings: map[logfile:./cloudflared.log metrics:localhost:45678 url:ssh://localhost:22]"}
+{"level":"info","autoupdateFreq":86400000,"time":"2021-06-25T06:45:25Z","message":"Autoupdate frequency is set"}
+{"level":"info","time":"2021-06-25T06:45:25Z","message":"Initial protocol h2mux"}
+{"level":"info","time":"2021-06-25T06:45:25Z","message":"Starting metrics server on 127.0.0.1:45678/metrics"}
+{"level":"info","connIndex":0,"location":"AMS","time":"2021-06-25T06:45:25Z","message":"Connection established"}
+{"level":"info","time":"2021-06-25T06:45:27Z","message":"Each HA connection's tunnel IDs: map[0:shtk9krntqip326levzt0negqrugtagrzq53k8puixx0dh621xbg]"}
+{"level":"info","time":"2021-06-25T06:45:27Z","message":"+------------------------------------------------------------------+"}
+{"level":"info","time":"2021-06-25T06:45:27Z","message":"|  Your free tunnel has started! Visit it:                         |"}
+{"level":"info","time":"2021-06-25T06:45:27Z","message":"|    https://listings-surgical-bedroom-speakers.trycloudflare.com  |"}
+{"level":"info","time":"2021-06-25T06:45:27Z","message":"+------------------------------------------------------------------+"}
+{"level":"info","time":"2021-06-25T06:45:27Z","message":"Route propagating, it may take up to 1 minute for your new route to become functional"}
+{"level":"info","connIndex":1,"location":"LHR","time":"2021-06-25T06:45:27Z","message":"Connection established"}
+{"level":"info","connIndex":2,"location":"AMS","time":"2021-06-25T06:45:28Z","message":"Connection established"}
+{"level":"info","time":"2021-06-25T06:45:29Z","message":"Each HA connection's tunnel IDs: map[0:shtk9krntqip326levzt0negqrugtagrzq53k8puixx0dh621xbg 1:shtk9krntqip326levzt0negqrugtagrzq53k8puixx0dh621xbg]"}
+{"level":"info","time":"2021-06-25T06:45:29Z","message":"+------------------------------------------------------------------+"}
+{"level":"info","time":"2021-06-25T06:45:29Z","message":"|  Your free tunnel has started! Visit it:                         |"}
+{"level":"info","time":"2021-06-25T06:45:29Z","message":"|    https://listings-surgical-bedroom-speakers.trycloudflare.com  |"}
+{"level":"info","time":"2021-06-25T06:45:29Z","message":"+------------------------------------------------------------------+"}
+{"level":"info","time":"2021-06-25T06:45:29Z","message":"Route propagating, it may take up to 1 minute for your new route to become functional"}
+{"level":"info","connIndex":3,"location":"LHR","time":"2021-06-25T06:45:29Z","message":"Connection established"}
+{"level":"info","time":"2021-06-25T06:45:30Z","message":"Each HA connection's tunnel IDs: map[0:shtk9krntqip326levzt0negqrugtagrzq53k8puixx0dh621xbg 1:shtk9krntqip326levzt0negqrugtagrzq53k8puixx0dh621xbg 2:shtk9krntqip326levzt0negqrugtagrzq53k8puixx0dh621xbg]"}
+{"level":"info","time":"2021-06-25T06:45:30Z","message":"+------------------------------------------------------------------+"}
+{"level":"info","time":"2021-06-25T06:45:30Z","message":"|  Your free tunnel has started! Visit it:                         |"}
+{"level":"info","time":"2021-06-25T06:45:30Z","message":"|    https://listings-surgical-bedroom-speakers.trycloudflare.com  |"}
+{"level":"info","time":"2021-06-25T06:45:30Z","message":"+------------------------------------------------------------------+"}
+{"level":"info","time":"2021-06-25T06:45:30Z","message":"Route propagating, it may take up to 1 minute for your new route to become functional"}
+{"level":"info","time":"2021-06-25T06:45:31Z","message":"Each HA connection's tunnel IDs: map[0:shtk9krntqip326levzt0negqrugtagrzq53k8puixx0dh621xbg 1:shtk9krntqip326levzt0negqrugtagrzq53k8puixx0dh621xbg 2:shtk9krntqip326levzt0negqrugtagrzq53k8puixx0dh621xbg 3:shtk9krntqip326levzt0negqrugtagrzq53k8puixx0dh621xbg]"}
+{"level":"info","time":"2021-06-25T06:45:31Z","message":"+------------------------------------------------------------------+"}
+{"level":"info","time":"2021-06-25T06:45:31Z","message":"|  Your free tunnel has started! Visit it:                         |"}
+{"level":"info","time":"2021-06-25T06:45:31Z","message":"|    https://listings-surgical-bedroom-speakers.trycloudflare.com  |"}
+{"level":"info","time":"2021-06-25T06:45:31Z","message":"+------------------------------------------------------------------+"}
+{"level":"info","time":"2021-06-25T06:45:31Z","message":"Route propagating, it may take up to 1 minute for your new route to become functional"}
+{"level":"info","time":"2021-06-25T06:57:23Z","message":"Initiating graceful shutdown due to signal interrupt ..."}
+{"level":"info","connIndex":0,"time":"2021-06-25T06:57:23Z","message":"Unregistered tunnel connection"}
+{"level":"info","connIndex":2,"time":"2021-06-25T06:57:23Z","message":"Unregistered tunnel connection"}
+{"level":"info","connIndex":3,"time":"2021-06-25T06:57:23Z","message":"Unregistered tunnel connection"}
+{"level":"info","connIndex":1,"time":"2021-06-25T06:57:23Z","message":"Unregistered tunnel connection"}
+{"level":"info","time":"2021-06-25T06:57:53Z","message":"Tunnel server stopped"}
+{"level":"info","time":"2021-06-25T06:57:53Z","message":"mux - read: EOF: connection closed unexpectedly"}
+{"level":"info","time":"2021-06-25T06:57:54Z","message":"Metrics server stopped"}
